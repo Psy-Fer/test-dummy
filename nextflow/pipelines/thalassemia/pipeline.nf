@@ -9,8 +9,8 @@ process minimap2 {
 
     input:
         val sample_id
-        path reads
-        path ref
+        val reads
+        val ref
 
     output:
         path 'sorted.bam'
@@ -39,8 +39,8 @@ process sniffles2 {
         val sample_id
         path bam
         path index
-        path ref
-        path trf
+        val ref
+        val trf
 
     output:
         path 'sniffles.vcf'
@@ -65,9 +65,9 @@ process clair3 {
         val sample_id
         path bam
         path index
-        path ref
-        path ref_index
-        path trf
+        val ref
+        val ref_index
+        val trf
 
     output:
         path 'phased_merge_output.vcf.gz'
@@ -100,7 +100,7 @@ process resultsout {
         val sample_id
         path sniffles2_vcf
         path clair3_vcf
-        path ref
+        val ref
 
     output:
         path 'sniffles.vcf.gz*'
@@ -126,10 +126,10 @@ process resultsout {
 
 
 workflow {
-    reads = file(params.reads)
-    ref = file(params.ref_genome)
-    ref_index = file(params.ref_genome_index)
-    trf = file(params.tandem_repeat_bed)
+    reads = "$params.reads"
+    ref = "$params.ref_genome"
+    ref_index = "$params.ref_genome_index"
+    trf = "$params.tandem_repeat_bed"
     sample_id = "$params.sample_id"
 
     minimap2(sample_id, reads, ref)
