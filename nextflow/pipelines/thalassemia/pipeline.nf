@@ -22,9 +22,9 @@ process minimap2 {
         samtools index sorted.bam
 
         OUTDIR="${params.azureFileShare}/${params.outdir}"
-        mkdir -p "$OUTDIR"
-        cp -v sorted.bam "$OUTDIR/$sample_id.sorted.bam"
-        cp -v sorted.bam.bai "$OUTDIR/$sample_id.sorted.bam.bai"
+        mkdir -p "\$OUTDIR"
+        cp -v sorted.bam "\$OUTDIR/$sample_id.sorted.bam"
+        cp -v sorted.bam.bai "\$OUTDIR/$sample_id.sorted.bam.bai"
         """
 
     stub:
@@ -56,7 +56,7 @@ process sniffles2 {
 
 
         OUTDIR="${params.azureFileShare}/${params.outdir}"
-        cp -v sniffles.vcf "$OUTDIR/$sample_id.sniffles.vcf"
+        cp -v sniffles.vcf "\$OUTDIR/$sample_id.sniffles.vcf"
         """
 
     stub:
@@ -92,7 +92,7 @@ process clair3 {
         --enable_phasing --longphase_for_phasing
 
         OUTDIR="${params.azureFileShare}/${params.outdir}"
-        cp -v phased_merge_output.vcf.gz "$OUTDIR/$sample_id.phased_merge_output.vcf.gz"
+        cp -v phased_merge_output.vcf.gz "\$OUTDIR/$sample_id.phased_merge_output.vcf.gz"
         """
 
     stub:
@@ -130,12 +130,12 @@ process resultsout {
         bcftools index -f --tbi minimap_on_target_clair_non-snvs.vcf.gz
 
         OUTDIR="${params.azureFileShare}/${params.outdir}"
-        cp -v sniffles.vcf.gz "$OUTDIR/$sample_id.sniffles.vcf.gz"
-        cp -v sniffles.vcf.gz.tbi "$OUTDIR/$sample_id.sniffles.vcf.gz.tbi"
-        cp -v minimap_on_target_clair_snvs.vcf.gz "$OUTDIR/$sample_id.minimap_on_target_clair_snvs.vcf.gz"
-        cp -v minimap_on_target_clair_snvs.vcf.gz.tbi "$OUTDIR/$sample_id.minimap_on_target_clair_snvs.vcf.gz.tbi"
-        cp -v minimap_on_target_clair_non-snvs.vcf.gz "$OUTDIR/$sample_id.minimap_on_target_clair_non-snvs.vcf.gz"
-        cp -v minimap_on_target_clair_non-snvs.vcf.gz.tbi "$OUTDIR/$sample_id.minimap_on_target_clair_non-snvs.vcf.gz.tbi"
+        cp -v sniffles.vcf.gz "\$OUTDIR/$sample_id.sniffles.vcf.gz"
+        cp -v sniffles.vcf.gz.tbi "\$OUTDIR/$sample_id.sniffles.vcf.gz.tbi"
+        cp -v minimap_on_target_clair_snvs.vcf.gz "\$OUTDIR/$sample_id.minimap_on_target_clair_snvs.vcf.gz"
+        cp -v minimap_on_target_clair_snvs.vcf.gz.tbi "\$OUTDIR/$sample_id.minimap_on_target_clair_snvs.vcf.gz.tbi"
+        cp -v minimap_on_target_clair_non-snvs.vcf.gz "\$OUTDIR/$sample_id.minimap_on_target_clair_non-snvs.vcf.gz"
+        cp -v minimap_on_target_clair_non-snvs.vcf.gz.tbi "\$OUTDIR/$sample_id.minimap_on_target_clair_non-snvs.vcf.gz.tbi"
         """
 
     stub:
