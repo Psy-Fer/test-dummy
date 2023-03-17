@@ -16,7 +16,7 @@ process minimap2 {
 
     script:
         """
-        minimap2 --secondary=no --MD -ax map-ont -t ${task.cpus} ${params.azureFileShare}/$ref ${params.azureFileShare}/$reads | samtools view -b -h -O "BAM" |  samtools sort -O "BAM" > sorted.bam
+        minimap2 --secondary=no --MD -ax map-ont -t ${task.cpus} ${params.azureFileShare}/$ref_genome ${params.azureFileShare}/$reads | samtools view -b -h -O "BAM" |  samtools sort -O "BAM" > sorted.bam
         samtools index sorted.bam
         """
 
@@ -43,7 +43,7 @@ process sniffles2 {
 
     script:
         """
-        sniffles --allow-overwrite --output-rnames --minsvlen 10 --input $bam --vcf sniffles.vcf --reference ${params.azureFileShare}/${params.ref} --tandem-repeats ${params.azureFileShare}/${params.trf}
+        sniffles --allow-overwrite --output-rnames --minsvlen 10 --input $bam --vcf sniffles.vcf --reference ${params.azureFileShare}/${params.ref_genome} --tandem-repeats ${params.azureFileShare}/${params.tandem_repeat_bed}
         """
 
     stub:
@@ -70,7 +70,7 @@ process clair3 {
         run_clair3.sh --threads=${task.cpus} \
         --include_all_ctgs \
         --bam_fn=$bam \
-        --ref_fn=${params.azureFileShare}/${params.ref} \
+        --ref_fn=${params.azureFileShare}/${params.ref_genome} \
         --platform=ont \
         --model_path=/root/miniconda3/envs/clair3/bin/models/r104_e81_sup_g5015 \
         --output=./ \
@@ -106,7 +106,7 @@ process resultsout {
         bcftools view --output-type z --types snps $clair3_vcf > minimap_on_target_clair_snvs.vcf.gz
         bcftools index -f --tbi minimap_on_target_clair_snvs.vcf.gz
         bcftools view --output-type z --exclude-types snps $clair3_vcf > nonsnv_tmp.vcf.gz
-        bcftools norm --fasta-ref ${params.azureFileShare}/${params.ref} --output-type z ./nonsnv_tmp.vcf.gz > minimap_on_target_clair_non-snvs.vcf.gz
+        bcftools norm --fasta-ref ${params.azureFileShare}/${params.ref_genome} --output-type z ./nonsnv_tmp.vcf.gz > minimap_on_target_clair_non-snvs.vcf.gz
         bcftools index -f --tbi minimap_on_target_clair_non-snvs.vcf.gz
         """
 
