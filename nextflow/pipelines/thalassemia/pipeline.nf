@@ -9,8 +9,6 @@ process minimap2 {
 
     input:
         val sample_id
-        val reads
-        val ref
 
     output:
         path 'sorted.bam'
@@ -39,15 +37,13 @@ process sniffles2 {
         val sample_id
         path bam
         path index
-        val ref
-        val trf
 
     output:
         path 'sniffles.vcf'
 
     script:
         """
-        sniffles --allow-overwrite --output-rnames --minsvlen 10 --input $bam --vcf sniffles.vcf --reference ${params.azureFileShare}/$ref --tandem-repeats ${params.azureFileShare}/$trf
+        sniffles --allow-overwrite --output-rnames --minsvlen 10 --input $bam --vcf sniffles.vcf --reference ${params.azureFileShare}/${params.ref} --tandem-repeats ${params.azureFileShare}/${params.trf}
         """
 
     stub:
@@ -65,9 +61,6 @@ process clair3 {
         val sample_id
         path bam
         path index
-        val ref
-        val ref_index
-        val trf
 
     output:
         path 'phased_merge_output.vcf.gz'
@@ -77,7 +70,7 @@ process clair3 {
         run_clair3.sh --threads=${task.cpus} \
         --include_all_ctgs \
         --bam_fn=$bam \
-        --ref_fn=${params.azureFileShare}/$ref \
+        --ref_fn=${params.azureFileShare}/${params.ref} \
         --platform=ont \
         --model_path=/root/miniconda3/envs/clair3/bin/models/r104_e81_sup_g5015 \
         --output=./ \
@@ -100,7 +93,6 @@ process resultsout {
         val sample_id
         path sniffles2_vcf
         path clair3_vcf
-        val ref
 
     output:
         path 'sniffles.vcf.gz*'
@@ -114,7 +106,7 @@ process resultsout {
         bcftools view --output-type z --types snps $clair3_vcf > minimap_on_target_clair_snvs.vcf.gz
         bcftools index -f --tbi minimap_on_target_clair_snvs.vcf.gz
         bcftools view --output-type z --exclude-types snps $clair3_vcf > nonsnv_tmp.vcf.gz
-        bcftools norm --fasta-ref ${params.azureFileShare}/$ref --output-type z ./nonsnv_tmp.vcf.gz > minimap_on_target_clair_non-snvs.vcf.gz
+        bcftools norm --fasta-ref ${params.azureFileShare}/${params.ref} --output-type z ./nonsnv_tmp.vcf.gz > minimap_on_target_clair_non-snvs.vcf.gz
         bcftools index -f --tbi minimap_on_target_clair_non-snvs.vcf.gz
         """
 
@@ -126,15 +118,11 @@ process resultsout {
 
 
 workflow {
-    reads = "$params.reads"
-    ref = "$params.ref_genome"
-    ref_index = "$params.ref_genome_index"
-    trf = "$params.tandem_repeat_bed"
     sample_id = "$params.sample_id"
 
-    minimap2(sample_id, reads, ref)
-    sniffles2(sample_id, minimap2.out[0], minimap2.out[1], ref, trf)
-    clair3(sample_id, minimap2.out[0], minimap2.out[1], ref, ref_index, trf)
-    resultsout(sample_id, sniffles2.out, clair3.out, ref)
+    minimap2(sample_id)
+    sniffles2(sample_id, minimap2.out[0], minimap2.out[1])
+    clair3(sample_id, minimap2.out[0], minimap2.out[1])
+    resultsout(sample_id, sniffles2.out, clair3.out)
 
 }
