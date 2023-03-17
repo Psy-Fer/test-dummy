@@ -16,7 +16,7 @@ process minimap2 {
 
     script:
         """
-        minimap2 --secondary=no --MD -ax map-ont -t ${task.cpus} ${params.azureFileShare}/${ref_genome} ${params.azureFileShare}/${reads} | samtools view -b -h -O "BAM" |  samtools sort -O "BAM" > sorted.bam
+        minimap2 --secondary=no --MD -ax map-ont -t ${task.cpus} ${params.azureFileShare}/${params.ref_genome} ${params.azureFileShare}/${params.reads} | samtools view -b -h -O "BAM" |  samtools sort -O "BAM" > sorted.bam
         samtools index sorted.bam
         """
 
