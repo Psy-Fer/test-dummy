@@ -1,0 +1,9 @@
+{
+    "reads": "./MQXW22198_pass.fastq.gz",
+    "ref_genome": "./ref/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna",
+    "ref_genome_index": "./ref/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.fai",
+    "tandem_repeat_bed": "./ref/human_GRCh38_no_alt_analysis_set.trf.bed",
+    "thal_regions": "./ref/thal_regions.hg38.bed",
+    "outdir": "./results/",
+    "sample_id": "unknown"
+ }
