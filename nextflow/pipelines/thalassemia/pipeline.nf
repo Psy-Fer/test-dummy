@@ -5,6 +5,7 @@ nextflow.enable.dsl=2
 process minimap2 {
     queue 'default'
     container "$params.azureRegistryServer/default/nwgs-minimap2:latest"
+    cpus 8
 
     publishDir "$params.azureFileShare/$params.outdir", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
 
@@ -32,6 +33,7 @@ process minimap2 {
 process sniffles2 {
     queue 'default'
     container "$params.azureRegistryServer/default/nwgs-sniffles2:latest"
+    cpus 4
 
     publishDir "$params.azureFileShare/$params.outdir", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
     
@@ -45,7 +47,7 @@ process sniffles2 {
 
     script:
         """
-        sniffles --allow-overwrite --output-rnames --minsvlen 10 --input $bam --vcf sniffles.vcf --reference ${params.azureFileShare}/${params.ref_genome} --tandem-repeats ${params.azureFileShare}/${params.tandem_repeat_bed}
+        sniffles --allow-overwrite --output-rnames -t 4 --minsvlen 10 --input $bam --vcf sniffles.vcf --reference ${params.azureFileShare}/${params.ref_genome} --tandem-repeats ${params.azureFileShare}/${params.tandem_repeat_bed}
         """
 
     stub:
@@ -57,6 +59,7 @@ process sniffles2 {
 process clair3 {
     queue 'default'
     container "$params.azureRegistryServer/default/nwgs-clair3:latest"
+    cpus 8
 
     publishDir "$params.azureFileShare/$params.outdir", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
 
@@ -90,6 +93,7 @@ process clair3 {
 process resultsout {
     queue 'default'
     container "$params.azureRegistryServer/default/nwgs-bcftools:latest"
+    cpus 4
 
     publishDir "$params.azureFileShare/$params.outdir", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
 
