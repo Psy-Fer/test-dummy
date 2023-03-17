@@ -17,7 +17,7 @@ process minimap2 {
 
     script:
         """
-        minimap2 --secondary=no --MD -ax map-ont -t ${task.cpus} ${params.azureFileShare}/${params.ref_genome} ${params.azureFileShare}/${params.reads} | samtools view -b -h -O "BAM" |  samtools sort -O "BAM" > sorted.bam
+        minimap2 --secondary=no --MD -ax map-ont -t 8 ${params.azureFileShare}/${params.ref_genome} ${params.azureFileShare}/${params.reads} | samtools view -b -h -O "BAM" |  samtools sort -O "BAM" > sorted.bam
         samtools index sorted.bam
         """
 
@@ -70,7 +70,7 @@ process clair3 {
 
     script:
         """
-        run_clair3.sh --threads=${task.cpus} \
+        run_clair3.sh --threads=8 \
         --include_all_ctgs \
         --bam_fn=$bam \
         --ref_fn=${params.azureFileShare}/${params.ref_genome} \
