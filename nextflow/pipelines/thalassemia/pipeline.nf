@@ -21,9 +21,9 @@ process minimap2 {
         minimap2 --secondary=no --MD -ax map-ont -t 8 ${params.azureFileShare}/${params.ref_genome} ${params.azureFileShare}/${params.reads} | samtools view -b -h -O "BAM" |  samtools sort -O "BAM" > sorted.bam
         samtools index sorted.bam
 
-        mkdir -p ${params.azureFileShare}/${params.outdir}
-        cp -v sorted.bam ${params.azureFileShare}/${params.outdir}/$sample_id.sorted.bam
-        cp -v sorted.bam.bai ${params.azureFileShare}/${params.outdir}/$sample_id.sorted.bam.bai
+        mkdir -p "${params.azureFileShare}/${params.outdir}"
+        cp -v sorted.bam "${params.azureFileShare}/${params.outdir}/$sample_id.sorted.bam"
+        cp -v sorted.bam.bai "${params.azureFileShare}/${params.outdir}/$sample_id.sorted.bam.bai"
         """
 
     stub:
@@ -54,7 +54,7 @@ process sniffles2 {
         sniffles --allow-overwrite --output-rnames -t 4 --minsvlen 10 --input $bam --vcf sniffles.vcf --reference ${params.azureFileShare}/${params.ref_genome} --tandem-repeats ${params.azureFileShare}/${params.tandem_repeat_bed}
 
 
-        cp -v sniffles.vcf ${params.azureFileShare}/${params.outdir}/$sample_id.sniffles.vcf
+        cp -v sniffles.vcf "${params.azureFileShare}/${params.outdir}/$sample_id.sniffles.vcf"
         """
 
     stub:
@@ -90,7 +90,7 @@ process clair3 {
         --enable_phasing --longphase_for_phasing
 
 
-        cp -v phased_merge_output.vcf.gz ${params.azureFileShare}/${params.outdir}/$sample_id.phased_merge_output.vcf.gz
+        cp -v phased_merge_output.vcf.gz "${params.azureFileShare}/${params.outdir}/$sample_id.phased_merge_output.vcf.gz"
         """
 
     stub:
@@ -128,12 +128,12 @@ process resultsout {
         bcftools index -f --tbi minimap_on_target_clair_non-snvs.vcf.gz
 
 
-        cp -v sniffles.vcf.gz ${params.azureFileShare}/${params.outdir}/$sample_id.sniffles.vcf.gz"
-        cp -v sniffles.vcf.gz.tbi ${params.azureFileShare}/${params.outdir}/$sample_id.sniffles.vcf.gz.tbi"
-        cp -v minimap_on_target_clair_snvs.vcf.gz ${params.azureFileShare}/${params.outdir}/$sample_id.minimap_on_target_clair_snvs.vcf.gz"
-        cp -v minimap_on_target_clair_snvs.vcf.gz.tbi ${params.azureFileShare}/${params.outdir}/$sample_id.minimap_on_target_clair_snvs.vcf.gz.tbi"
-        cp -v minimap_on_target_clair_non-snvs.vcf.gz ${params.azureFileShare}/${params.outdir}/$sample_id.minimap_on_target_clair_non-snvs.vcf.gz"
-        cp -v minimap_on_target_clair_non-snvs.vcf.gz.tbi ${params.azureFileShare}/${params.outdir}/$sample_id.minimap_on_target_clair_non-snvs.vcf.gz.tbi"
+        cp -v sniffles.vcf.gz "${params.azureFileShare}/${params.outdir}/$sample_id.sniffles.vcf.gz"
+        cp -v sniffles.vcf.gz.tbi "${params.azureFileShare}/${params.outdir}/$sample_id.sniffles.vcf.gz.tbi"
+        cp -v minimap_on_target_clair_snvs.vcf.gz "${params.azureFileShare}/${params.outdir}/$sample_id.minimap_on_target_clair_snvs.vcf.gz"
+        cp -v minimap_on_target_clair_snvs.vcf.gz.tbi "${params.azureFileShare}/${params.outdir}/$sample_id.minimap_on_target_clair_snvs.vcf.gz.tbi"
+        cp -v minimap_on_target_clair_non-snvs.vcf.gz "${params.azureFileShare}/${params.outdir}/$sample_id.minimap_on_target_clair_non-snvs.vcf.gz"
+        cp -v minimap_on_target_clair_non-snvs.vcf.gz.tbi "${params.azureFileShare}/${params.outdir}/$sample_id.minimap_on_target_clair_non-snvs.vcf.gz.tbi"
         """
 
     stub:
