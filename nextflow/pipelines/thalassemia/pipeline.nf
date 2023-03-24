@@ -141,18 +141,17 @@ process publishfiles {
 
     script:
         """
-        cp $bam ${params.azureFileShare}/results/$sample_id-$bam.name
-        cp $bai ${params.azureFileShare}/results/$sample_id-$bai.name
-        cp $sniffles2_vcf ${params.azureFileShare}/results/$sample_id-$sniffles2_vcf.name
-        cp $clair3_vcf ${params.azureFileShare}/results/$sample_id-$clair3_vcf.name
-        cp $sniffles_gz ${params.azureFileShare}/results/$sample_id-$sniffles_gz.name
-        cp $sniffles_gz_tbi ${params.azureFileShare}/results/$sample_id-$sniffles_gz_tbi.name
-        cp $snv_vcf ${params.azureFileShare}/results/$sample_id-$snv_vcf.name
-        cp $snv_vcf_tbi ${params.azureFileShare}/results/$sample_id-$snv_vcf_tbi.name
-        cp $non_snv_vcf ${params.azureFileShare}/results/$sample_id-$non_snv_vcf.name
-        cp $non_snv_vcf_tbi ${params.azureFileShare}/results/$sample_id-$non_snv_vcf_tbi.name
-        mkdir ${params.azureFileShare}/results/test
-        cp $sniffles_gz {params.azureFileShare}/results/test/$sample_id-$sniffles_gz.name
+        mkdir ${params.azureFileShare}/$sample_id
+        cp $bam ${params.azureFileShare}/$sample_id/$sample_id-$bam.name
+        cp $bai ${params.azureFileShare}/$sample_id/$sample_id-$bai.name
+        cp $sniffles2_vcf ${params.azureFileShare}/$sample_id/$sample_id-$sniffles2_vcf.name
+        cp $clair3_vcf ${params.azureFileShare}/$sample_id/$sample_id-$clair3_vcf.name
+        cp $sniffles_gz ${params.azureFileShare}/$sample_id/$sample_id-$sniffles_gz.name
+        cp $sniffles_gz_tbi ${params.azureFileShare}/$sample_id/$sample_id-$sniffles_gz_tbi.name
+        cp $snv_vcf ${params.azureFileShare}/$sample_id/$sample_id-$snv_vcf.name
+        cp $snv_vcf_tbi ${params.azureFileShare}/$sample_id/$sample_id-$snv_vcf_tbi.name
+        cp $non_snv_vcf ${params.azureFileShare}/$sample_id/$sample_id-$non_snv_vcf.name
+        cp $non_snv_vcf_tbi ${params.azureFileShare}/$sample_id/$sample_id-$non_snv_vcf_tbi.name
         """
 }
 
