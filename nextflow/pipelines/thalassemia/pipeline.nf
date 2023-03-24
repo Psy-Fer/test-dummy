@@ -7,7 +7,7 @@ process minimap2 {
     container "$params.azureRegistryServer/default/nwgs-minimap2:latest"
     cpus 8
 
-    publishDir "$params.azureFileShare", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
+    publishDir "$params.azureFileShare/results/", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
 
     input:
         val sample_id
@@ -48,6 +48,7 @@ process sniffles2 {
     script:
         """
         sniffles --allow-overwrite --output-rnames -t 4 --minsvlen 10 --input $bam --vcf sniffles.vcf --reference ${params.azureFileShare}/ref/${params.ref_genome} --tandem-repeats ${params.azureFileShare}/ref/${params.tandem_repeat_bed}
+        cp $bam ${params.azureFileShare}/results/sortedtest.bam
         """
 
     stub:
@@ -116,6 +117,8 @@ process resultsout {
         bcftools view --output-type z --exclude-types snps $clair3_vcf > nonsnv_tmp.vcf.gz
         bcftools norm --fasta-ref ${params.azureFileShare}/ref/${params.ref_genome} --output-type z ./nonsnv_tmp.vcf.gz > minimap_on_target_clair_non-snvs.vcf.gz
         bcftools index -f --tbi minimap_on_target_clair_non-snvs.vcf.gz
+
+        cp $sniffles2_vcf ${params.azureFileShare}/snifflestester.vcf
         """
 
     stub:
