@@ -7,10 +7,7 @@ process minimap2 {
     container "$params.azureRegistryServer/default/nwgs-minimap2:latest"
     cpus 8
 
-    publishDir "$params.azureFileShare/results/", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
-
-    input:
-        val sample_id
+    // publishDir "$params.azureFileShare/results/", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
 
     output:
         path 'sorted.bam'
@@ -35,10 +32,9 @@ process sniffles2 {
     container "$params.azureRegistryServer/default/nwgs-sniffles2:latest"
     cpus 4
 
-    publishDir "$params.azureFileShare", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
+    // publishDir "$params.azureFileShare", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
     
     input:
-        val sample_id
         path bam
         path index
 
@@ -48,7 +44,6 @@ process sniffles2 {
     script:
         """
         sniffles --allow-overwrite --output-rnames -t 4 --minsvlen 10 --input $bam --vcf sniffles.vcf --reference ${params.azureFileShare}/ref/${params.ref_genome} --tandem-repeats ${params.azureFileShare}/ref/${params.tandem_repeat_bed}
-        cp $bam ${params.azureFileShare}/results/sortedtest.bam
         """
 
     stub:
@@ -62,10 +57,9 @@ process clair3 {
     container "$params.azureRegistryServer/default/nwgs-clair3:latest"
     cpus 8
 
-    publishDir "$params.azureFileShare", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
+    // publishDir "$params.azureFileShare", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
 
     input:
-        val sample_id
         path bam
         path index
 
@@ -96,17 +90,18 @@ process resultsout {
     container "$params.azureRegistryServer/default/nwgs-bcftools:latest"
     cpus 4
 
-    publishDir "$params.azureFileShare", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
+    // publishDir "$params.azureFileShare", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
 
     input:
-        val sample_id
         path sniffles2_vcf
         path clair3_vcf
 
     output:
         path 'sniffles.vcf.gz*'
-        path 'minimap_on_target_clair_snvs.vcf.gz*'
-        path 'minimap_on_target_clair_non-snvs.vcf.gz*'
+        path 'minimap_on_target_clair_snvs.vcf.gz'
+        path 'minimap_on_target_clair_snvs.vcf.gz.tbi'
+        path 'minimap_on_target_clair_non-snvs.vcf.gz'
+        path 'minimap_on_target_clair_non-snvs.vcf.gz.tbi'
 
     script:
         """
@@ -117,8 +112,6 @@ process resultsout {
         bcftools view --output-type z --exclude-types snps $clair3_vcf > nonsnv_tmp.vcf.gz
         bcftools norm --fasta-ref ${params.azureFileShare}/ref/${params.ref_genome} --output-type z ./nonsnv_tmp.vcf.gz > minimap_on_target_clair_non-snvs.vcf.gz
         bcftools index -f --tbi minimap_on_target_clair_non-snvs.vcf.gz
-
-        cp $sniffles2_vcf ${params.azureFileShare}/snifflestester.vcf
         """
 
     stub:
@@ -127,13 +120,48 @@ process resultsout {
         """
 }
 
+process publishfiles {
+    queue 'default'
+    container "$params.azureRegistryServer/default/nwgs-bcftools:latest"
+    cpus 1
+
+    input:
+        val sample_id
+        path bam
+        path bai
+        path sniffles2_vcf
+        path clair3_vcf
+        path sniffles_gz
+        path snv_vcf
+        path snv_vcf_tbi
+        path non_snv_vcf
+        path non_snv_vcf_tbi
+
+    script:
+        """
+        cp $bam ${params.azureFileShare}/results/$sample_id-$bam.name
+        cp $bai ${params.azureFileShare}/results/$sample_id-$bai.name
+        cp $sniffles2_vcf ${params.azureFileShare}/results/$sample_id-$sniffles2_vcf.name
+        cp $clair3_vcf ${params.azureFileShare}/results/$sample_id-$clair3_vcf.name
+        cp $sniffles_gz ${params.azureFileShare}/results/$sample_id-$sniffles_gz.name
+        cp $snv_vcf ${params.azureFileShare}/results/$sample_id-$snv_vcf.name
+        cp $snv_vcf_tbi ${params.azureFileShare}/results/$sample_id-$snv_vcf_tbi.name
+        cp $non_snv_vcf ${params.azureFileShare}/results/$sample_id-$non_snv_vcf.name
+        cp $non_snv_vcf_tbi ${params.azureFileShare}/results/$sample_id-$non_snv_vcf_tbi.name
+        mkdir ${params.azureFileShare}/results/test
+        cp $sniffles_gz {params.azureFileShare}/results/test/$sample_id-$sniffles_gz.name
+        """
+}
+
+
 
 workflow {
     sample_id = "$params.sample_id"
 
-    minimap2(sample_id)
-    sniffles2(sample_id, minimap2.out[0], minimap2.out[1])
-    clair3(sample_id, minimap2.out[0], minimap2.out[1])
-    resultsout(sample_id, sniffles2.out, clair3.out)
+    minimap2()
+    sniffles2(minimap2.out[0], minimap2.out[1])
+    clair3(minimap2.out[0], minimap2.out[1])
+    resultsout(sniffles2.out, clair3.out)
+    publishfiles(sample_id, minimap2.out[0], minimap2.out[1], sniffles2.out, clair3.out, resultsout.out[0], resultsout.out[1], resultsout.out[2], resultsout.out[3], resultsout.out[4])
 
 }
