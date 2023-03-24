@@ -97,7 +97,8 @@ process resultsout {
         path clair3_vcf
 
     output:
-        path 'sniffles.vcf.gz*'
+        path 'sniffles.vcf.gz'
+        path 'sniffles.vcf.gz.tbi'
         path 'minimap_on_target_clair_snvs.vcf.gz'
         path 'minimap_on_target_clair_snvs.vcf.gz.tbi'
         path 'minimap_on_target_clair_non-snvs.vcf.gz'
@@ -132,6 +133,7 @@ process publishfiles {
         path sniffles2_vcf
         path clair3_vcf
         path sniffles_gz
+        path sniffles_gz_tbi
         path snv_vcf
         path snv_vcf_tbi
         path non_snv_vcf
@@ -144,6 +146,7 @@ process publishfiles {
         cp $sniffles2_vcf ${params.azureFileShare}/results/$sample_id-$sniffles2_vcf.name
         cp $clair3_vcf ${params.azureFileShare}/results/$sample_id-$clair3_vcf.name
         cp $sniffles_gz ${params.azureFileShare}/results/$sample_id-$sniffles_gz.name
+        cp $sniffles_gz_tbi ${params.azureFileShare}/results/$sample_id-$sniffles_gz_tbi.name
         cp $snv_vcf ${params.azureFileShare}/results/$sample_id-$snv_vcf.name
         cp $snv_vcf_tbi ${params.azureFileShare}/results/$sample_id-$snv_vcf_tbi.name
         cp $non_snv_vcf ${params.azureFileShare}/results/$sample_id-$non_snv_vcf.name
@@ -162,6 +165,6 @@ workflow {
     sniffles2(minimap2.out[0], minimap2.out[1])
     clair3(minimap2.out[0], minimap2.out[1])
     resultsout(sniffles2.out, clair3.out)
-    publishfiles(sample_id, minimap2.out[0], minimap2.out[1], sniffles2.out, clair3.out, resultsout.out[0], resultsout.out[1], resultsout.out[2], resultsout.out[3], resultsout.out[4])
+    publishfiles(sample_id, minimap2.out[0], minimap2.out[1], sniffles2.out, clair3.out, resultsout.out[0], resultsout.out[1], resultsout.out[2], resultsout.out[3], resultsout.out[4], resultsout.out[5])
 
 }
