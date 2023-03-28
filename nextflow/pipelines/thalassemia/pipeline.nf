@@ -7,8 +7,6 @@ process minimap2 {
     container "$params.azureRegistryServer/default/nwgs-minimap2:latest"
     cpus 8
 
-    // publishDir "$params.azureFileShare/results/", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
-
     output:
         path 'sorted.bam'
         path 'sorted.bam.bai'
@@ -31,8 +29,6 @@ process sniffles2 {
     queue 'default'
     container "$params.azureRegistryServer/default/nwgs-sniffles2:latest"
     cpus 4
-
-    // publishDir "$params.azureFileShare", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
     
     input:
         path bam
@@ -56,8 +52,6 @@ process clair3 {
     queue 'default'
     container "$params.azureRegistryServer/default/nwgs-clair3:latest"
     cpus 8
-
-    // publishDir "$params.azureFileShare", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
 
     input:
         path bam
@@ -89,8 +83,6 @@ process resultsout {
     queue 'default'
     container "$params.azureRegistryServer/default/nwgs-bcftools:latest"
     cpus 4
-
-    // publishDir "$params.azureFileShare", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id.$filename" }
 
     input:
         path sniffles2_vcf
