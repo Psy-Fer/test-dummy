@@ -13,7 +13,7 @@ process minimap2 {
 
     script:
         """
-        minimap2 --secondary=no --MD -ax map-ont -t 8 ${params.azureFileShare}/ref/${params.ref_genome} ${params.azureFileShare}/${params.reads} | samtools view -b -h -O "BAM" |  samtools sort -O "BAM" > sorted.bam
+        minimap2 --secondary=no --MD -ax map-ont -t 32 ${params.azureFileShare}/ref/${params.ref_genome} ${params.azureFileShare}/${params.reads} | samtools view -b -h -O "BAM" |  samtools sort -O "BAM" > sorted.bam
         samtools index sorted.bam
         """
 
@@ -39,7 +39,7 @@ process sniffles2 {
 
     script:
         """
-        sniffles --allow-overwrite --output-rnames -t 4 --minsvlen 10 --input $bam --vcf sniffles.vcf --reference ${params.azureFileShare}/ref/${params.ref_genome} --tandem-repeats ${params.azureFileShare}/ref/${params.tandem_repeat_bed}
+        sniffles --allow-overwrite --output-rnames -t 32 --minsvlen 10 --input $bam --vcf sniffles.vcf --reference ${params.azureFileShare}/ref/${params.ref_genome} --tandem-repeats ${params.azureFileShare}/ref/${params.tandem_repeat_bed}
         """
 
     stub:
@@ -62,7 +62,7 @@ process clair3 {
 
     script:
         """
-        run_clair3.sh --threads=8 \
+        run_clair3.sh --threads=32 \
         --include_all_ctgs \
         --bam_fn=$bam \
         --ref_fn=${params.azureFileShare}/ref/${params.ref_genome} \
