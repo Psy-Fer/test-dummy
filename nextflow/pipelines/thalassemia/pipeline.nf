@@ -80,7 +80,7 @@ process clair3 {
 
 
 process resultsout {
-    queue 'default'
+    queue 'middi'
     container "$params.azureRegistryServer/default/nwgs-bcftools:latest"
     cpus 8
 
@@ -114,7 +114,7 @@ process resultsout {
 }
 
 process publishfiles {
-    queue 'default'
+    queue 'middi'
     container "$params.azureRegistryServer/default/nwgs-bcftools:latest"
     cpus 2
 
