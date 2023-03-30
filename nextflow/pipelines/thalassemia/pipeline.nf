@@ -3,9 +3,9 @@
 nextflow.enable.dsl=2
 
 process minimap2 {
-    queue 'default'
+    queue 'middi'
     container "$params.azureRegistryServer/default/nwgs-minimap2:latest"
-    cpus 8
+    cpus 32
 
     output:
         path 'sorted.bam'
@@ -26,9 +26,9 @@ process minimap2 {
 
 
 process sniffles2 {
-    queue 'default'
+    queue 'middi'
     container "$params.azureRegistryServer/default/nwgs-sniffles2:latest"
-    cpus 4
+    cpus 32
     
     input:
         path bam
@@ -49,9 +49,9 @@ process sniffles2 {
 }
 
 process clair3 {
-    queue 'default'
+    queue 'middi'
     container "$params.azureRegistryServer/default/nwgs-clair3:latest"
-    cpus 8
+    cpus 32
 
     input:
         path bam
@@ -82,7 +82,7 @@ process clair3 {
 process resultsout {
     queue 'default'
     container "$params.azureRegistryServer/default/nwgs-bcftools:latest"
-    cpus 4
+    cpus 8
 
     input:
         path sniffles2_vcf
@@ -116,7 +116,7 @@ process resultsout {
 process publishfiles {
     queue 'default'
     container "$params.azureRegistryServer/default/nwgs-bcftools:latest"
-    cpus 1
+    cpus 2
 
     input:
         val sample_id
