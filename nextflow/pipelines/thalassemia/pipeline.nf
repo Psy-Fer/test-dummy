@@ -246,9 +246,9 @@ process postproccess {
 
         # bcftools view --header-only !{clair3_whatshap_vcf} > tmp.vcf
         # insertions
-        # bcftools view --no-header --output-type v --types indels !{clair3_whatshap_vcf} | awk 'length($4) == 1 && length($5) > 1 && length($5) < 21' >> tmp.vcf
+        bcftools view --no-header --output-type v --types indels !{clair3_whatshap_vcf} | awk 'length(\$4) == 1 && length(\$5) > 1 && length(\$5) < 21' >> tmp.vcf
         # deletions
-        # bcftools view --no-header --output-type v --types indels !{clair3_whatshap_vcf} | awk 'length($5) == 1 && length($4) > 1 && length($4) < 21' >> tmp.vcf
+        bcftools view --no-header --output-type v --types indels !{clair3_whatshap_vcf} | awk 'length(\$5) == 1 && length(\$4) > 1 && length(\$4) < 21' >> tmp.vcf
         # variants that are not indels
         # bcftools view --no-header --output-type v --exclude-types indels !{clair3_whatshap_vcf} >> tmp.vcf
         # sort
