@@ -203,7 +203,7 @@ process sniffles2 {
         --output-rnames \
         --minsvlen 20 \
         --input $bam \
-        --vcf sniffles.vcf \
+        --vcf sniffles.vcf.gz \
         --snf sniffles.snf \
         --phase
 
