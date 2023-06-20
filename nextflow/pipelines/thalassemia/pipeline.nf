@@ -8,20 +8,20 @@ process preprocess {
     cpus 2
 
     output:
-        path "$reads.name"
-        path "$ref.name"
-        path "$ref_index.name"
-        path "$trf.name"
-        path "$bed.name"
+        path "$params.reads"
+        path "$params.ref_genome"
+        path "$params.ref_genome_index"
+        path "$params.tandem_repeat_bed"
+        path "$params.thal_regions"
 
     script:
         """
         echo "Staging files"
-        cp $params.azureFileShare/$params.reads ./$reads.name
-        cp $params.azureFileShare/ref/$params.ref_genome ./$ref.name
-        cp $params.azureFileShare/ref/$params.ref_genome_index ./$ref_index.name
-        cp $params.azureFileShare/ref/$params.tandem_repeat_bed ./$trf.name
-        cp $params.azureFileShare/ref/$params.thal_regions ./$bed.name
+        cp $params.azureFileShare/$params.reads ./$params.reads
+        cp $params.azureFileShare/ref/$params.ref_genome ./$params.ref_genome
+        cp $params.azureFileShare/ref/$params.ref_genome_index ./$params.ref_genome_index
+        cp $params.azureFileShare/ref/$params.tandem_repeat_bed ./$params.tandem_repeat_bed
+        cp $params.azureFileShare/ref/$params.thal_regions ./$params.thal_regions
 
         """
 
