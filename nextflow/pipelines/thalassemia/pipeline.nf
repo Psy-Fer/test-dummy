@@ -406,7 +406,6 @@ workflow {
     postproccess(sniffles2.out[0], whatshap.out[0], whatshap.out[1], whatshap.out[2], whatshap.out[3])
     publishfiles(sample_id, minimap2.out[0], minimap2.out[1], sniffles2.out[1], whatshap.out[0], whatshap.out[1], whatshap.out[2],
                  whatshap.out[3], whatshap.out[4], whatshap.out[5], whatshap.out[6], postproccess.out[0], 
-                 postproccess.out[1], postproccess.out[2], postproccess.out[3], postproccess.out[4], postproccess.out[5],
-                 postproccess.out[6], postproccess.out[7])
+                 postproccess.out[1], postproccess.out[2], postproccess.out[3], postproccess.out[4], postproccess.out[5])
 
 }
