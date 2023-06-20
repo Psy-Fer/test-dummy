@@ -196,7 +196,7 @@ process sniffles2 {
     script:
         """
         sniffles --allow-overwrite \
-        -threads ${task.cpus} \
+        --threads ${task.cpus} \
         --sample-id $sample_id \
         --reference $ref_genome \
         --tandem-repeats $tandem_repeat_bed \
