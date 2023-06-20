@@ -185,7 +185,7 @@ process sniffles2 {
         val sample_id
         path ref_genome
         path ref_genome_index
-        path thal_region
+        path tandem_repeat_bed
         path bam
         path index
 
