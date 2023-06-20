@@ -7,14 +7,6 @@ process preprocess {
     container "$params.azureRegistryServer/default/nwgs-bcftools:latest"
     cpus 2
 
-    input:
-        path reads
-        path ref
-        path ref_index
-        path trf
-        path bed
-
-
     output:
         path "$reads.name"
         path "$ref.name"
@@ -25,6 +17,11 @@ process preprocess {
     script:
         """
         echo "Staging files"
+        cp $params.azureFileShare/$params.reads ./$reads.name
+        cp $params.azureFileShare/ref/$params.ref_genome ./$ref.name
+        cp $params.azureFileShare/ref/$params.ref_genome_index ./$ref_index.name
+        cp $params.azureFileShare/ref/$params.tandem_repeat_bed ./$trf.name
+        cp $params.azureFileShare/ref/$params.thal_regions ./$bed.name
 
         """
 
@@ -392,13 +389,7 @@ workflow {
 
     sample_id = "$params.sample_id"
 
-    reads = "$params.azureFileShare/$params.reads"
-    ref_genome = "$params.azureFileShare/ref/$params.ref_genome"
-    ref_genome_index = "$params.azureFileShare/ref/$params.ref_genome_index"
-    tandem_repeat_bed = "$params.azureFileShare/ref/$params.tandem_repeat_bed"
-    thal_regions = "$params.azureFileShare/ref/$params.thal_regions"
-
-    preprocess(reads, ref_genome, ref_genome_index, tandem_repeat_bed, thal_regions)
+    preprocess()
     minimap2(preprocess.out[0], preprocess.out[1], preprocess.out[2])
     clair3(sample_id,  preprocess.out[1], preprocess.out[2], minimap2.out[0], minimap2.out[1], preprocess.out[4])
     whatshap(sample_id, preprocess.out[1], preprocess.out[2], minimap2.out[0], minimap2.out[1], preprocess.out[4], clair3.out[0], clair3.out[1])
