@@ -392,7 +392,7 @@ workflow {
 
     sample_id = "$params.sample_id"
 
-    reads = file("$params.azureFileShare/ref/$params.reads")
+    reads = file("$params.azureFileShare/$params.reads")
     ref_genome = file("$params.azureFileShare/ref/$params.ref_genome")
     ref_genome_index = file("$params.azureFileShare/ref/$params.ref_genome_index")
     tandem_repeat_bed = file("$params.azureFileShare/ref/$params.tandem_repeat_bed")
