@@ -343,23 +343,23 @@ process publishfiles {
 
     script:
         """
-        mkdir ${params.azureFileShare}}/$sample_id
-        cp $bam ${params.azureFileShare}}/$sample_id/$sample_id-$bam.name
-        cp $bam_bai ${params.azureFileShare}}/$sample_id/$sample_id-$bam_bai.name
-        cp $clair3_whatshap_vcf ${params.azureFileShare}}/$sample_id/$sample_id-$clair3_whatshap_vcf.name
-        cp $clair3_whatshap_vcf_tbi ${params.azureFileShare}}/$sample_id/$sample_id-$clair3_whatshap_vcf_tbi.name
-        cp $minimap_haplotagged_bam ${params.outdir}/$sample_id/$sample_id-$minimap_haplotagged_bam.name
-        cp $minimap_haplotagged_bam_bai ${params.azureFileShare}}/$sample_id/$sample_id-$minimap_haplotagged_bam_bai.name
-        cp $sniffles2_snf ${params.azureFileShare}}/$sample_id/$sample_id-$sniffles2_snf.name
-        cp $clair3_whatshap_phase_stats ${params.azureFileShare}}/$sample_id/$sample_id-$clair3_whatshap_phase_stats.name
-        cp $clair3_whatshap_phase_blocks_gtf ${params.azureFileShare}}/$sample_id/$sample_id-$clair3_whatshap_phase_blocks_gtf.name
-        cp $clair3_whatshap_haplotag_list ${params.azureFileShare}}/$sample_id/$sample_id-$clair3_whatshap_haplotag_list.name
-        cp $sniffles2_vcf ${params.azureFileShare}}/$sample_id/$sample_id-$sniffles2_vcf.name
-        cp $sniffles2_vcf_tbi ${params.azureFileShare}}/$sample_id/$sample_id-$sniffles2_vcf_tbi.name
-        cp $clair3_whatshap_corrected_vcf ${params.azureFileShare}}/$sample_id/$sample_id-$clair3_whatshap_corrected_vcf.name
-        cp $clair3_whatshap_corrected_vcf_tbi ${params.azureFileShare}}/$sample_id/$sample_id-$clair3_whatshap_corrected_vcf_tbi.name
-        cp $combined_variants_vcf ${params.azureFileShare}}/$sample_id/$sample_id-$combined_variants_vcf.name
-        cp $combined_variants_vcf_tbi ${params.azureFileShare}}/$sample_id/$sample_id-$combined_variants_vcf_tbi.name
+        mkdir ${params.azureFileShare}/$sample_id
+        cp $bam ${params.azureFileShare}/$sample_id/$sample_id-$bam.name
+        cp $bam_bai ${params.azureFileShare}/$sample_id/$sample_id-$bam_bai.name
+        cp $clair3_whatshap_vcf ${params.azureFileShare}/$sample_id/$sample_id-$clair3_whatshap_vcf.name
+        cp $clair3_whatshap_vcf_tbi ${params.azureFileShare}/$sample_id/$sample_id-$clair3_whatshap_vcf_tbi.name
+        cp $minimap_haplotagged_bam ${params.azureFileShare}/$sample_id/$sample_id-$minimap_haplotagged_bam.name
+        cp $minimap_haplotagged_bam_bai ${params.azureFileShare}/$sample_id/$sample_id-$minimap_haplotagged_bam_bai.name
+        cp $sniffles2_snf ${params.azureFileShare}/$sample_id/$sample_id-$sniffles2_snf.name
+        cp $clair3_whatshap_phase_stats ${params.azureFileShare}/$sample_id/$sample_id-$clair3_whatshap_phase_stats.name
+        cp $clair3_whatshap_phase_blocks_gtf ${params.azureFileShare}/$sample_id/$sample_id-$clair3_whatshap_phase_blocks_gtf.name
+        cp $clair3_whatshap_haplotag_list ${params.azureFileShare}/$sample_id/$sample_id-$clair3_whatshap_haplotag_list.name
+        cp $sniffles2_vcf ${params.azureFileShare}/$sample_id/$sample_id-$sniffles2_vcf.name
+        cp $sniffles2_vcf_tbi ${params.azureFileShare}/$sample_id/$sample_id-$sniffles2_vcf_tbi.name
+        cp $clair3_whatshap_corrected_vcf ${params.azureFileShare}/$sample_id/$sample_id-$clair3_whatshap_corrected_vcf.name
+        cp $clair3_whatshap_corrected_vcf_tbi ${params.azureFileShare}/$sample_id/$sample_id-$clair3_whatshap_corrected_vcf_tbi.name
+        cp $combined_variants_vcf ${params.azureFileShare}/$sample_id/$sample_id-$combined_variants_vcf.name
+        cp $combined_variants_vcf_tbi ${params.azureFileShare}/$sample_id/$sample_id-$combined_variants_vcf_tbi.name
         """
 
     stub:
