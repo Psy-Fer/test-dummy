@@ -334,8 +334,6 @@ process publishfiles {
         path 'clair3_whatshap.haplotag_list.tsv'
         path 'sniffles.vcf.gz'
         path 'sniffles.vcf.gz.tbi'
-        path 'clair3_whatshap_filtered.vcf.gz'
-        path 'clair3_whatshap_filtered.vcf.gz.tbi'
         path 'clair3_whatshap_corrected.vcf.gz'
         path 'clair3_whatshap_corrected.vcf.gz.tbi'
         path 'combined_variants.vcf.gz'
