@@ -266,8 +266,6 @@ process publishfiles {
     container "$params.azureRegistryServer/default/nwgs-bcftools:latest"
     cpus 2
 
-    publishDir "$params.azureFileShare/$params.sample_id/pubdir", mode: 'copy', overwrite: true, saveAs: { filename -> "$sample_id-$filename" }
-
     input:
         val sample_id
         path bam
@@ -284,22 +282,6 @@ process publishfiles {
         path sniffles2_vcf_tbi
         path clair3_whatshap_corrected_vcf
         path clair3_whatshap_corrected_vcf_tbi
-    
-    output:
-        path 'minimap2.sorted.bam'
-        path 'minimap2.sorted.bam.bai'
-        path 'clair3_whatshap.vcf.gz'
-        path 'clair3_whatshap.vcf.gz.tbi'
-        path 'minimap_haplotagged.bam'
-        path 'minimap_haplotagged.bam.bai'
-        path 'sniffles.snf'
-        path 'clair3_whatshap.phase_stats.tsv'
-        path 'clair3_whatshap.phase_blocks.gtf'
-        path 'clair3_whatshap.haplotag_list.tsv'
-        path 'sniffles.vcf.gz'
-        path 'sniffles.vcf.gz.tbi'
-        path 'clair3_whatshap_corrected.vcf.gz'
-        path 'clair3_whatshap_corrected.vcf.gz.tbi'
 
     script:
         """
