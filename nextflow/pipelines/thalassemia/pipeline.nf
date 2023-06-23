@@ -235,24 +235,9 @@ process postproccess {
         path 'sniffles.vcf.gz.tbi'
         path 'clair3_whatshap_corrected.vcf.gz'
         path 'clair3_whatshap_corrected.vcf.gz.tbi'
-        path 'combined_variants.vcf.gz'
-        path 'combined_variants.vcf.gz.tbi'
 
     shell:
         """
-
-        # bcftools view --header-only !{clair3_whatshap_vcf} > tmp.vcf
-        # insertions
-        # bcftools view --no-header --output-type v --types indels !{clair3_whatshap_vcf} | awk 'length(\$4) == 1 && length(\$5) > 1 && length(\$5) < 21' >> tmp.vcf
-        # deletions
-        # bcftools view --no-header --output-type v --types indels !{clair3_whatshap_vcf} | awk 'length(\$5) == 1 && length(\$4) > 1 && length(\$4) < 21' >> tmp.vcf
-        # variants that are not indels
-        # bcftools view --no-header --output-type v --exclude-types indels !{clair3_whatshap_vcf} >> tmp.vcf
-        # sort
-        # bcftools sort --output-type z tmp.vcf > clair3_whatshap_filtered.vcf.gz
-        # index
-        # bcftools index --tbi clair3_whatshap_filtered.vcf.gz
-
         # index sniffles vcf
         bcftools index --tbi !{sniffles2_vcf}
 
@@ -264,34 +249,15 @@ process postproccess {
         --clair3_vcf_input !{clair3_whatshap_vcf} \
         --sv_vcf_input !{sniffles2_vcf} \
         --vcf_output clair3_whatshap_corrected.vcf
-
-        # bcftools index --tbi clair3_whatshap_corrected.vcf.gz
-            
-        # Combine SVs and small variants into a single phased VCF [bcftools merge]
-        # different formatting of sniffles and clair3 VCFs might cause some problems here: maybe not possible to just merge them straight up.
-
-        bcftools merge \
-        --force-samples \
-        --merge both \
-        --output-type z \
-        --output ./combined_variants.vcf.gz \
-        clair3_whatshap_corrected.vcf.gz \
-        !{sniffles2_vcf}
-
-        bcftools index --tbi combined_variants.vcf.gz
-
+        
         """
 
     stub:
         """
         touch sniffles.vcf.gz
         touch sniffles.vcf.gz.tbi
-        # touch clair3_whatshap_filtered.vcf.gz
-        # touch clair3_whatshap_filtered.vcf.gz.tbi
         touch clair3_whatshap_corrected.vcf.gz
         touch clair3_whatshap_corrected.vcf.gz.tbi
-        touch combined_variants.vcf.gz
-        touch combined_variants.vcf.gz.tbi
         """
 }
 
@@ -318,8 +284,6 @@ process publishfiles {
         path sniffles2_vcf_tbi
         path clair3_whatshap_corrected_vcf
         path clair3_whatshap_corrected_vcf_tbi
-        path combined_variants_vcf
-        path combined_variants_vcf_tbi
     
     output:
         path 'minimap2.sorted.bam'
@@ -336,8 +300,6 @@ process publishfiles {
         path 'sniffles.vcf.gz.tbi'
         path 'clair3_whatshap_corrected.vcf.gz'
         path 'clair3_whatshap_corrected.vcf.gz.tbi'
-        path 'combined_variants.vcf.gz'
-        path 'combined_variants.vcf.gz.tbi'
 
     script:
         """
@@ -356,8 +318,6 @@ process publishfiles {
         cp $sniffles2_vcf_tbi ${params.azureFileShare}/$sample_id/$sample_id-$sniffles2_vcf_tbi.name
         cp $clair3_whatshap_corrected_vcf ${params.azureFileShare}/$sample_id/$sample_id-$clair3_whatshap_corrected_vcf.name
         cp $clair3_whatshap_corrected_vcf_tbi ${params.azureFileShare}/$sample_id/$sample_id-$clair3_whatshap_corrected_vcf_tbi.name
-        cp $combined_variants_vcf ${params.azureFileShare}/$sample_id/$sample_id-$combined_variants_vcf.name
-        cp $combined_variants_vcf_tbi ${params.azureFileShare}/$sample_id/$sample_id-$combined_variants_vcf_tbi.name
         """
 
     stub:
@@ -376,8 +336,6 @@ process publishfiles {
         touch sniffles.vcf.gz.tbi
         touch clair3_whatshap_corrected.vcf.gz
         touch clair3_whatshap_corrected.vcf.gz.tbi
-        touch combined_variants.vcf.gz
-        touch combined_variants.vcf.gz.tbi
         """
 }
 
@@ -395,6 +353,6 @@ workflow {
     postproccess(sniffles2.out[0], whatshap.out[0], whatshap.out[1], whatshap.out[2], whatshap.out[3])
     publishfiles(sample_id, minimap2.out[0], minimap2.out[1], sniffles2.out[1], whatshap.out[0], whatshap.out[1], whatshap.out[2],
                  whatshap.out[3], whatshap.out[4], whatshap.out[5], whatshap.out[6], postproccess.out[0], 
-                 postproccess.out[1], postproccess.out[2], postproccess.out[3], postproccess.out[4], postproccess.out[5])
+                 postproccess.out[1], postproccess.out[2], postproccess.out[3])
 
 }
