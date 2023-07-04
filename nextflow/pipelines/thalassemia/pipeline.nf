@@ -115,7 +115,6 @@ process whatshap {
         path ref_genome_index
         path bam
         path index
-        path thal_region
         path clair3_vcf
         path clair3_vcf_tbi
 
@@ -330,7 +329,7 @@ workflow {
     preprocess()
     minimap2(preprocess.out[0], preprocess.out[1], preprocess.out[2])
     clair3(sample_id,  preprocess.out[1], preprocess.out[2], minimap2.out[0], minimap2.out[1], preprocess.out[4])
-    whatshap(sample_id, preprocess.out[1], preprocess.out[2], minimap2.out[0], minimap2.out[1], preprocess.out[4], clair3.out[0], clair3.out[1])
+    whatshap(sample_id, preprocess.out[1], preprocess.out[2], minimap2.out[0], minimap2.out[1], clair3.out[0], clair3.out[1])
     sniffles2(sample_id, preprocess.out[1], preprocess.out[2], preprocess.out[3], whatshap.out[2], whatshap.out[3])
     postproccess(sniffles2.out[0], whatshap.out[0], whatshap.out[1], whatshap.out[2], whatshap.out[3])
     publishfiles(sample_id, minimap2.out[0], minimap2.out[1], sniffles2.out[1], whatshap.out[0], whatshap.out[1], whatshap.out[2],
