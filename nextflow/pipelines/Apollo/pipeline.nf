@@ -22,6 +22,7 @@ process preprocess {
         ln -s ${params.azureFileShare}/${params.ref_genome_index} ${params.ref_genome_index}
         ln -s ${params.azureFileShare}/${params.tandem_repeat_bed} ${params.tandem_repeat_bed}
         ln -s ${params.azureFileShare}/${params.thal_regions} ${params.thal_regions}
+        ls -la
         ls -la > ./ls_output.txt
         
         """
