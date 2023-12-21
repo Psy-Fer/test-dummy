@@ -18,10 +18,10 @@ process preprocess {
         """
         echo "Staging files"
         ln -s ${params.azureFileShare}/${params.reads} ${params.reads}
-        ln -s ${params.azureFileShare}/${params.ref_genome} ${params.ref_genome}
-        ln -s ${params.azureFileShare}/${params.ref_genome_index} ${params.ref_genome_index}
-        ln -s ${params.azureFileShare}/${params.tandem_repeat_bed} ${params.tandem_repeat_bed}
-        ln -s ${params.azureFileShare}/${params.thal_regions} ${params.thal_regions}
+        ln -s ${params.azureFileShare}/ref/${params.ref_genome} ${params.ref_genome}
+        ln -s ${params.azureFileShare}/ref/${params.ref_genome_index} ${params.ref_genome_index}
+        ln -s ${params.azureFileShare}/ref/${params.tandem_repeat_bed} ${params.tandem_repeat_bed}
+        ln -s ${params.azureFileShare}/ref/${params.thal_regions} ${params.thal_regions}
         ls -la
         ls -la > ./ls_output.txt
         
