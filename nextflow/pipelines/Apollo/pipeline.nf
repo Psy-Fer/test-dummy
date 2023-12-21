@@ -8,18 +8,18 @@ process preprocess {
     cpus 2
 
     input:
-        path "$params.azureFileShare/$params.reads", stageAs: "./$params.reads"
-        path "$params.azureFileShare/ref/$params.ref_genome", stageAs: "./$params.ref_genome"
-        path "$params.azureFileShare/ref/$params.ref_genome_index", stageAs: "./$params.ref_genome_index"
-        path "$params.azureFileShare/ref/$params.tandem_repeat_bed", stageAs: "./$params.tandem_repeat_bed"
-        path "$params.azureFileShare/ref/$params.thal_regions", stageAs: "./$params.thal_regions"
+        path reads
+        path ref_genome
+        path ref_genome_index
+        path tandem_repeat_bed
+        path thal_regions
 
     output:
-        path "$params.reads"
-        path "$params.ref_genome"
-        path "$params.ref_genome_index"
-        path "$params.tandem_repeat_bed"
-        path "$params.thal_regions"
+        path reads
+        path ref_genome
+        path ref_genome_index
+        path tandem_repeat_bed
+        path thal_regions
 
     script:
         """
@@ -328,8 +328,14 @@ process publishfiles {
 workflow {
 
     sample_id = "$params.sample_id"
+    reads =  "$params.azureFileShare/$params.reads"
+    ref_genome =  "$params.azureFileShare/ref/$params.ref_genome"
+    ref_genome_index =  "$params.azureFileShare/ref/$params.ref_genome_index"
+    tandem_repeat_bed =  "$params.azureFileShare/ref/$params.tandem_repeat_bed"
+    thal_regions =  "$params.azureFileShare/ref/$params.thal_regions"
 
-    preprocess()
+
+    preprocess(reads, ref_genome, ref_genome_index, tandem_repeat_bed, thal_regions)
     minimap2(preprocess.out[0], preprocess.out[1], preprocess.out[2])
     // clair3(sample_id,  preprocess.out[1], preprocess.out[2], minimap2.out[0], minimap2.out[1], preprocess.out[4])
     // whatshap(sample_id, preprocess.out[1], preprocess.out[2], minimap2.out[0], minimap2.out[1], clair3.out[0], clair3.out[1])
