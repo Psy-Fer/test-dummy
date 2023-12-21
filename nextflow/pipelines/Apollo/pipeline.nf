@@ -328,11 +328,11 @@ process publishfiles {
 workflow {
 
     sample_id = "$params.sample_id"
-    reads =  file($params.azureFileShare/$params.reads)
-    ref_genome =  file($params.azureFileShare/ref/$params.ref_genome)
-    ref_genome_index =  file($params.azureFileShare/ref/$params.ref_genome_index)
-    tandem_repeat_bed =  file($params.azureFileShare/ref/$params.tandem_repeat_bed)
-    thal_regions =  file($params.azureFileShare/ref/$params.thal_regions)
+    reads =  file(params.azureFileShare/$params.reads)
+    ref_genome =  file(params.azureFileShare/ref/$params.ref_genome)
+    ref_genome_index =  file(params.azureFileShare/ref/$params.ref_genome_index)
+    tandem_repeat_bed =  file(params.azureFileShare/ref/$params.tandem_repeat_bed)
+    thal_regions =  file(params.azureFileShare/ref/$params.thal_regions)
 
 
     preprocess(reads, ref_genome, ref_genome_index, tandem_repeat_bed, thal_regions)
