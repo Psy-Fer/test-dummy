@@ -7,23 +7,21 @@ process preprocess {
     container "$params.azureRegistryServer/default/nwgs-bcftools:latest"
     cpus 2
 
-    input:
-        path reads
-        path ref_genome
-        path ref_genome_index
-        path tandem_repeat_bed
-        path thal_regions
-
     output:
-        path reads
-        path ref_genome
-        path ref_genome_index
-        path tandem_repeat_bed
-        path thal_regions
+        path "$params.reads"
+        path "$params.ref_genome"
+        path "$params.ref_genome_index"
+        path "$params.tandem_repeat_bed"
+        path "$params.thal_regions"
 
     script:
         """
         echo "Staging files"
+        ln -s ${params.azureFileShare}/${params.reads} ${params.reads}
+        ln -s ${params.azureFileShare}/${params.ref_genome} ${params.ref_genome}
+        ln -s ${params.azureFileShare}/${params.ref_genome_index} ${params.ref_genome_index}
+        ln -s ${params.azureFileShare}/${params.tandem_repeat_bed} ${params.tandem_repeat_bed}
+        ln -s ${params.azureFileShare}/${params.thal_regions} ${params.thal_regions}
         ls -la > ./ls_output.txt
         
         """
@@ -328,14 +326,8 @@ process publishfiles {
 workflow {
 
     sample_id = "$params.sample_id"
-    reads =  file(params.azureFileShare/params.reads)
-    ref_genome =  file(params.azureFileShare/ref/params.ref_genome)
-    ref_genome_index =  file(params.azureFileShare/ref/params.ref_genome_index)
-    tandem_repeat_bed =  file(params.azureFileShare/ref/params.tandem_repeat_bed)
-    thal_regions =  file(params.azureFileShare/ref/params.thal_regions)
 
-
-    preprocess(reads, ref_genome, ref_genome_index, tandem_repeat_bed, thal_regions)
+    preprocess()
     minimap2(preprocess.out[0], preprocess.out[1], preprocess.out[2])
     // clair3(sample_id,  preprocess.out[1], preprocess.out[2], minimap2.out[0], minimap2.out[1], preprocess.out[4])
     // whatshap(sample_id, preprocess.out[1], preprocess.out[2], minimap2.out[0], minimap2.out[1], clair3.out[0], clair3.out[1])
