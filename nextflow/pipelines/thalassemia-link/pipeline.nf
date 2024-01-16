@@ -88,7 +88,7 @@ process clair3 {
         --ref_fn=$ref_genome \
         --bed_fn=$thal_regions \
         --bam_fn=$bam \
-        --model_path=/root/miniconda3/envs/clair3/bin/models/r104_e81_sup_g5015 \
+        --model_path=/root/miniconda3/envs/clair3/bin/models/r1041_e82_400bps_sup_v420 \
         --include_all_ctgs \
         --platform=ont \
         --output=./ \
